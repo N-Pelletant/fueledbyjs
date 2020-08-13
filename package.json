@@ -1,0 +1,29 @@
+{
+  "name": "fueledbyjs",
+  "version": "1.0.0",
+  "description": "Framework build during a project for university",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/N-Pelletant/fueledbyjs.git"
+  },
+  "author": "Nicolas Pelletant",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/N-Pelletant/fueledbyjs/issues"
+  },
+  "homepage": "https://github.com/N-Pelletant/fueledbyjs#readme",
+  "devDependencies": {
+    "css-loader": "^4.2.1",
+    "html-loader": "^1.1.0",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.3",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  }
+}

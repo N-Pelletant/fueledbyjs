@@ -17,14 +17,19 @@ export function interpolateData(htmlTemplate, data) {
     return htmlTemplate;
 }
 
-export function interpolateChild(template = "", children = {}) {
+export function interpolateChild(template = {}, children = {}) {
     
     Object.keys(children).forEach(key => {
         const childName = key.toLowerCase();
         const childContent = children[key];
         const childTags = template.querySelectorAll(childName);
 
+        const props = childContent.props || [];
+
         childTags.forEach(childTag => {
+            props.forEach(elem => {
+                childContent.data[elem] = childTag.getAttribute(elem)
+            })
             const defaultHtml = childTag.innerHTML;
             template.replaceChild(ParseHtml(childContent, [defaultHtml]), childTag)
         });

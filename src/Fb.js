@@ -1,3 +1,4 @@
 import Root from './components/Root'
 
-document.body.appendChild(Root.render)
+const holder = document.getElementById('app');
+holder.appendChild(Root.render)

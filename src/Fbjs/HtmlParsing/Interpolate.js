@@ -1,8 +1,8 @@
-import {findAllInterpolations} from './Regex';
+import {findAllDataInterpolations} from './Regex';
 import ParseHtml from './ParseHtml';
 
 export function interpolateData(htmlTemplate, data) {
-    const interpolations = findAllInterpolations(htmlTemplate);
+    const interpolations = findAllDataInterpolations(htmlTemplate);
 
     if(interpolations) {
         interpolations.forEach(elem => {

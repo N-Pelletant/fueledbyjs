@@ -1,24 +1,52 @@
-import {findAllInterpolations} from './Regex';
+import findAllDataPlaceholders from './Regex';
 import ParseHtml from './ParseHtml';
 
-export function interpolateData(htmlTemplate, data) {
-    const interpolations = findAllInterpolations(htmlTemplate);
+/**
+ * 
+ * @param {HTMLElement} template 
+ * @param {Object} data 
+ * @returns {HTMLElement}
+ */
+export function interpolateData(template, data) {
+    recursiveTextNodeModifier(template, data, findAndReplaceData);
+    return template;
+}
 
-    if(interpolations) {
-        interpolations.forEach(elem => {
-            const key = elem.substring(2, elem.length - 1);
-            htmlTemplate = htmlTemplate.replace(
-                elem, 
+/**
+ * 
+ * @param {HTMLElement} textNode 
+ * @param {Object} data 
+ */
+const findAndReplaceData = (textNode, data) => {
+    let str = textNode.nodeValue;
+    const placeholders = findAllDataPlaceholders(str);
+
+    if (placeholders) {
+        placeholders.forEach(placeholder => {
+            const key = placeholder.substring(2, placeholder.length - 1);
+            str = str.replace(
+                placeholder,
                 data[key]
             );
         });
     }
 
-    return htmlTemplate;
+    textNode.nodeValue = str;
 }
 
+const recursiveTextNodeModifier = (node, data, modifier) => {
+    node.childNodes.forEach(childNode => {
+        if (childNode.nodeName === "#text" && childNode.nodeValue !== " ") {
+            findAndReplaceData(childNode, data)
+        } else if (childNode.nodeName !== "#text") {
+            recursiveTextNodeModifier(childNode, data, modifier);
+        }
+    })
+}
+
+
 export function interpolateChild(template = "", children = {}) {
-    
+
     Object.keys(children).forEach(key => {
         const childName = key.toLowerCase();
         const childContent = children[key];
@@ -34,7 +62,7 @@ export function interpolateChild(template = "", children = {}) {
 }
 
 const methodAttribute = [
-    ["fbjs-click","click"],
+    ["fbjs-click", "click"],
     ["fbjs-hoverOn", "mouseover"],
     ["fbjs-hoverOff", "mouseout"],
 ];

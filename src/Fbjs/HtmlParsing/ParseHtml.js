@@ -10,13 +10,13 @@ const ParseHtml = function ({
 },
     defaultHtml = ""
 ) {
-    const dataTemplate = interpolateData(template, {...data, defaultHtml});
+    const parsedTemplate = new DOMParser().parseFromString(template, "text/html").querySelector(name);
 
-    const parsedTemplate = new DOMParser().parseFromString(dataTemplate, "text/html").querySelector(name);
+    const dataTemplate = interpolateData(parsedTemplate, {...data, defaultHtml});
 
-    const conditionateTemplate = applyConditions(parsedTemplate, data);
+    const conditionTemplate = applyConditions(dataTemplate, data);
 
-    const eventTemplate = interpolateEvent(conditionateTemplate, methods);
+    const eventTemplate = interpolateEvent(conditionTemplate, methods);
 
     const childTemplate = interpolateChild(eventTemplate, children);
 

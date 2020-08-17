@@ -1,5 +1,6 @@
 import findAllDataPlaceholders from './Regex';
 import ParseHtml from './ParseHtml';
+import Fbjs from '../Class';
 
 /**
  * 
@@ -71,11 +72,12 @@ const methodAttribute = [
     ["fbjs-hoverOff", "mouseout"],
 ];
 
-export function interpolateEvent(template = {}, methods = {}) {
+export function interpolateEvent(template = {}, elem) {
     methodAttribute.forEach(attribute => {
         const tags = template.querySelectorAll(`[${attribute[0]}]`);
         tags.forEach(tag => {
-            tag.addEventListener(attribute[1], methods[tag.getAttribute(attribute[0])]);
+            const func = elem.methods[tag.getAttribute(attribute[0])];
+            tag.addEventListener(attribute[1], () => {Fbjs.updateDataFromEvent(elem, func)});
         })
     })
 

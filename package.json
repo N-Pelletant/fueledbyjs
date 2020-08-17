@@ -4,7 +4,7 @@
   "description": "Framework build during a project for university",
   "private": "true",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --no-cache ./*",
     "build": "webpack"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "devDependencies": {
     "css-loader": "^4.2.1",
     "html-loader": "^1.1.0",
+    "jest": "^26.4.0",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.3",
     "style-loader": "^1.2.1",

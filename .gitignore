@@ -1,5 +1,7 @@
 src/components/
 .vscode/
+test/
+
 # Logs
 logs
 *.log

@@ -19,14 +19,20 @@ export default class Fbjs {
         return this.htmlTemplate;
     }
 
-    static updateDataFromEvent(elem, cb) {
-        cb(elem.data);
+    static updateDataFromEvent(elem, cb, source) {
+        cb(elem.data, source);
         Fbjs.updateElement(elem);
     }
 
     static updateElement(elem) {
+        const {name, parent} = elem;
+
         elem.htmlTemplate = ParseHtml(elem);
-        const elemToReplace = elem.parent.getElementsByTagName(elem.name)[0];
-        elem.parent.replaceChild(elem.htmlTemplate, elemToReplace);
+        if(parent instanceof Fbjs) {
+
+        } else {
+            const elemToReplace = parent.getElementsByTagName(name)[0];
+            parent.replaceChild(elem.htmlTemplate, elemToReplace);
+        }
     }
 }

@@ -2,23 +2,32 @@ import findAllDataPlaceholders from './Regex';
 import ParseHtml from './ParseHtml';
 import Fbjs from '../Class';
 
-/**
- * 
- * @param {HTMLElement} template 
- * @param {Object} data 
- * @returns {HTMLElement}
- */
 export function interpolateData(template, data) {
-    recursiveTextNodeModifier(template, data, findAndReplaceData);
+    recursiveTextNodeModifier(template, data, findAndReplaceDataInTextNode);
+
+    const elemWithValue = template.querySelectorAll("[value]");
+
+    elemWithValue.forEach(elem => {
+        let attributeValue = elem.getAttribute("value");
+        const placeholders = findAllDataPlaceholders(attributeValue);
+
+        if (placeholders) {
+            placeholders.forEach(placeholder => {
+                const key = placeholder.substring(2, placeholder.length - 1);
+                attributeValue = attributeValue.replace(
+                    placeholder,
+                    data[key]
+                );
+            });
+        }
+
+        elem.setAttribute("value", attributeValue);
+    })
+
     return template;
 }
 
-/**
- * 
- * @param {HTMLElement} textNode 
- * @param {Object} data 
- */
-const findAndReplaceData = (textNode, data) => {
+const findAndReplaceDataInTextNode = (textNode, data) => {
     let str = textNode.nodeValue;
     const placeholders = findAllDataPlaceholders(str);
 
@@ -38,14 +47,14 @@ const findAndReplaceData = (textNode, data) => {
 const recursiveTextNodeModifier = (node, data, modifier) => {
     node.childNodes.forEach(childNode => {
         if (childNode.nodeName === "#text" && childNode.nodeValue !== " ") {
-            findAndReplaceData(childNode, data)
+            findAndReplaceDataInTextNode(childNode, data)
         } else if (childNode.nodeName !== "#text") {
             recursiveTextNodeModifier(childNode, data, modifier);
         }
     })
 }
 
-export function interpolateChild(template = {}, children = {}) {
+export function interpolateChild(template, children) {
     
     Object.keys(children).forEach(key => {
         const childName = key.toLowerCase();
@@ -70,6 +79,7 @@ const methodAttribute = [
     ["fbjs-click", "click"],
     ["fbjs-hoverOn", "mouseover"],
     ["fbjs-hoverOff", "mouseout"],
+    ["fbjs-change", "change"]
 ];
 
 export function interpolateEvent(template = {}, elem) {
@@ -77,7 +87,7 @@ export function interpolateEvent(template = {}, elem) {
         const tags = template.querySelectorAll(`[${attribute[0]}]`);
         tags.forEach(tag => {
             const func = elem.methods[tag.getAttribute(attribute[0])];
-            tag.addEventListener(attribute[1], () => {Fbjs.updateDataFromEvent(elem, func)});
+            tag.addEventListener(attribute[1], () => {Fbjs.updateDataFromEvent(elem, func, tag)});
         })
     })
 

@@ -1,7 +1,7 @@
 /**
  * Return all matches of '${...}' in the string, with any kind of word between the braces
- * @param {String} str the string to search in.
- * @returns {(Array|null)} return array of strings or null if no matches.
+ * @param {String} str The string to search matches in.
+ * @returns {(Array|null)} Return array of strings or null if no matches.
  */
 
 function findAllDataPlaceholders(str) {

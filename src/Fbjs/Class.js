@@ -2,15 +2,29 @@
 import ParseHtml from "./HtmlParsing/ParseHtml";
 
 //Definition of the class
+/**
+ * @module Class/Fbjs
+ */
 export default class Fbjs {
+    /**
+     * @constructor
+     */
     constructor(args) {
+        /** @type {String} */
         this.name           = args.name;
+        /** @type {String} */
         this.template       = args.template;
+        /** @type {Object} */
         this.children       = args.children;
+        /** @type {Object} */
         this.data           = args.data;
+        /** @type {Object} */
         this.methods        = args.methods;
+        /** @type {Array.<String>} */
         this.props          = args.props;
+        /** @type {HTMLElement} */
         this.htmlTemplate   = null;
+        /** @type {(Fbjs|HTMLElement)} */
         this.parent         = null;
     }
 

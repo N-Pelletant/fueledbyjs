@@ -14,17 +14,31 @@ export default class Fbjs {
         this.parent         = null;
     }
 
-    get render() {
+    /**
+     * Set html template as property and return it.
+     * @returns {HTMLElement} Html parsed template.
+     */
+    render() {
         this.htmlTemplate = ParseHtml(this);
         return this.htmlTemplate;
     }
 
-    static updateDataFromEvent(elem, cb, source) {
-        cb(elem.data, source);
-        Fbjs.updateElement(elem);
+    /**
+     * Update data in Fbjs instance according to method triggered.
+     * @param {Fbjs} elem Fbjs instance to get data from.
+     * @param {Function} fn Function to trigger on event.
+     * @param {HTMLElement} source Html element which triggers the events.
+     */
+    static updateDataFromEvent(elem, fn, source) {
+        fn(elem.data, source);
+        Fbjs.updateDisplay(elem);
     }
 
-    static updateElement(elem) {
+    /**
+     * Update display in parent of Fbjs instance.
+     * @param {Fbjs} elem Fbjs instance to update display of.
+     */
+    static updateDisplay(elem) {
         const {name, parent} = elem;
 
         elem.htmlTemplate = ParseHtml(elem);

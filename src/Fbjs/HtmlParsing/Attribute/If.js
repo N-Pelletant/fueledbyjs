@@ -1,21 +1,18 @@
 const ifAttribute = "fbjs-if";
 
 /**
- * Remove all tags in template where linked data in "fbjs-if" attribute is falsy.
- * @param {HTMLElement} template Template to remove children from.
- * @param {Object} data Object where linked data are found.
- * @returns {HTMLElement} Returns template without removed child.
+ * Remove all nodes with falsy conditional data in the html template.
+ * @param {Fbjs} FbjsElement Element to work on.
  */
-export default function applyIfConditions(template, data) {
-  const tags = template.querySelectorAll(`[${ifAttribute}]`);
+export default function applyIfConditions(FbjsElement) {
+  const {htmlTemplate, data} = FbjsElement;
+  const htmlNodes = htmlTemplate.querySelectorAll(`[${ifAttribute}]`);
 
-  tags.forEach(tag => {
-    const shouldShow = !!data[tag.getAttribute(ifAttribute)];
+  htmlNodes.forEach(htmlNode => {
+    const shouldShow = !!data[htmlNode.getAttribute(ifAttribute)];
 
     if (!shouldShow) {
-      template.removeChild(tag);
+      htmlNode.style.display = "none";
     }
-  })
-
-  return template;
+  });
 }

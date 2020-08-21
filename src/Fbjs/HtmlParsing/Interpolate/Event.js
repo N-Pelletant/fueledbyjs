@@ -11,19 +11,18 @@ const methodAttribute = [
 ];
 
 /**
- * Add events with corresponding method in all template tags with custom attributes for events.
- * @param {HTMLElement} template Template to add events in.
- * @param {Fbjs} elem Fbjs instance to get methods and data from.
- * @returns {HTMLElement} Returns template with all events added.
+ * Add events with corresponding method to all html nodes tags with custom attributes for events.
+ * @param {Fbjs} FbjsElement Element to work on.
  */
-export default function interpolateEvent(template, elem) {
-  methodAttribute.forEach(attribute => {
-    const tags = template.querySelectorAll(`[${attribute[0]}]`);
-    tags.forEach(tag => {
-      const func = elem.methods[tag.getAttribute(attribute[0])];
-      tag.addEventListener(attribute[1], () => { Fbjs.updateDataFromEvent(elem, func, tag) });
-    })
-  })
+export default function interpolateEvent(FbjsElement) {
+  const {htmlTemplate, methods} = FbjsElement;
 
-  return template;
+  methodAttribute.forEach(attribute => {
+    const htmlNodes = htmlTemplate.querySelectorAll(`[${attribute[0]}]`);
+
+    htmlNodes.forEach(htmlNode => {
+      const func = methods[htmlNode.getAttribute(attribute[0])];
+      htmlNode.addEventListener(attribute[1], () => { Fbjs.updateDataFromEvent(FbjsElement, func, htmlNode) });
+    });
+  });
 }

@@ -1,28 +1,19 @@
-import ParseHtml from './../ParseHtml';
+import _ from "lodash";
+import Fbjs from '../../Class';
 
 /**
- * Place all children in template in place of tags with the same name. 
- * @param {HTMLElement} template Template to place children in.
- * @param {Object} children Object containing all children to place in the template.
- * @returns {HTMLElement} Returns template with child replaced.
+ * Place all children in html in place of nodes with the same name. 
+ * @param {Fbjs} FbjsElement Element to work in.
  */
-export default function interpolateChild(template, children) {
+export default function interpolateChild(FbjsElement) {
+    const { htmlTemplate, implementedChildren } = FbjsElement;
 
-    Object.keys(children).forEach(key => {
-        const childName = key.toLowerCase();
-        const childContent = children[key];
-        const childTags = template.querySelectorAll(childName);
+    if(!_.isEmpty(implementedChildren)) {
+        Object.keys(implementedChildren).forEach(id => {
+            const oldChild = htmlTemplate.querySelector(`#${id}`);
+            const newChild = implementedChildren[id].render();
 
-        const props = childContent.props || [];
-
-        childTags.forEach(childTag => {
-            props.forEach(elem => {
-                childContent.data[elem] = childTag.getAttribute(elem)
-            })
-            const defaultHtml = childTag.innerHTML;
-            template.replaceChild(ParseHtml(childContent, [defaultHtml]), childTag)
+            oldChild.parentElement.replaceChild(newChild, oldChild);
         });
-    });
-
-    return template;
+    }
 }

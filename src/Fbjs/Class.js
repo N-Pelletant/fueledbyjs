@@ -1,40 +1,22 @@
+import _ from 'lodash';
+
 //Importing the functions needed for the class
 import ParseHtml from "./HtmlParsing/ParseHtml";
 
 //Definition of the class
-/**
- * @module Class/Fbjs
- */
 export default class Fbjs {
-    /**
-     * @constructor
-     */
     constructor(args) {
-        /** @type {String} */
-        this.name           = args.name;
-        /** @type {String} */
-        this.template       = args.template;
-        /** @type {Object} */
-        this.children       = args.children;
-        /** @type {Object} */
-        this.data           = args.data;
-        /** @type {Object} */
-        this.methods        = args.methods;
-        /** @type {Array.<String>} */
-        this.props          = args.props;
+        this.name                   = args.name;
+        this.stringTemplate         = args.template || args.stringTemplate;
+        this.children               = args.children;
+        this.data                   = args.data;
+        this.methods                = args.methods;
+        this.props                  = args.props;
+        this.parent                 = args.parent;
         /** @type {HTMLElement} */
-        this.htmlTemplate   = null;
-        /** @type {(Fbjs|HTMLElement)} */
-        this.parent         = null;
-    }
-
-    /**
-     * Set html template as property and return it.
-     * @returns {HTMLElement} Html parsed template.
-     */
-    render() {
-        this.htmlTemplate = ParseHtml(this);
-        return this.htmlTemplate;
+        this.htmlTemplate           = null;
+        this.implementedChildren    = {};
+        this.id                     = null;
     }
 
     /**
@@ -53,14 +35,28 @@ export default class Fbjs {
      * @param {Fbjs} elem Fbjs instance to update display of.
      */
     static updateDisplay(elem) {
-        const {name, parent} = elem;
+        const {name, parent, id} = elem;
 
-        elem.htmlTemplate = ParseHtml(elem);
+        const newChild = elem.render();
         if(parent instanceof Fbjs) {
-
+            const oldChild = document.getElementById(id);
+            oldChild.parentElement.replaceChild(newChild, oldChild);
         } else {
-            const elemToReplace = parent.getElementsByTagName(name)[0];
-            parent.replaceChild(elem.htmlTemplate, elemToReplace);
+            const oldChild = parent.querySelector(name);
+            parent.replaceChild(newChild, oldChild);
         }
+    }
+
+    /**
+     * Set html template as property and return it.
+     * @returns {HTMLElement} Html parsed template.
+     */
+    render() {
+        this.htmlTemplate = ParseHtml(this);
+        return this.htmlTemplate;
+    }
+
+    cloneProperties() {
+        return _.cloneDeep(this);
     }
 }

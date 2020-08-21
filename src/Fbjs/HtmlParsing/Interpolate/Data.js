@@ -1,18 +1,18 @@
 import findAllDataPlaceholders from './../Regex';
 
 /**
- * Interpolates data in all placeholders and value attributes.
- * @param {HTMLElement} template Template to interpolate data in.
- * @param {Object} data Object containing all data to interpolate in the template.
- * @returns {HTMLElement} Returns template with data interpolated.
+ * Interpolates data in all placeholders and value attributes of the html template of the element.
+ * @param {Fbjs} FbjsElement Element to work on.
  */
-export default function interpolateData(template, data) {
-  recursiveTextNodeModifier(template, data, findAndReplaceDataInTextNode);
+export default function interpolateData(FbjsElement) {
+  const {htmlTemplate, data} = FbjsElement;
 
-  const elemWithValue = template.querySelectorAll("[value]");
+  recursiveTextNodeModifier(htmlTemplate, data, findAndReplaceDataInTextNode);
 
-  elemWithValue.forEach(elem => {
-    let attributeValue = elem.getAttribute("value");
+  const elementsWithValueAttribute = htmlTemplate.querySelectorAll("[value]");
+
+  elementsWithValueAttribute.forEach(element => {
+    let attributeValue = element.getAttribute("value");
     const placeholders = findAllDataPlaceholders(attributeValue);
 
     if (placeholders) {
@@ -25,10 +25,8 @@ export default function interpolateData(template, data) {
       });
     }
 
-    elem.setAttribute("value", attributeValue);
-  })
-
-  return template;
+    element.setAttribute("value", attributeValue);
+  });
 }
 
 /**
@@ -62,9 +60,9 @@ const findAndReplaceDataInTextNode = (textNode, data) => {
 const recursiveTextNodeModifier = (node, data, modifier) => {
   node.childNodes.forEach(childNode => {
     if (childNode.nodeName === "#text" && childNode.nodeValue !== " ") {
-      findAndReplaceDataInTextNode(childNode, data)
+      modifier(childNode, data);
     } else if (childNode.nodeName !== "#text") {
       recursiveTextNodeModifier(childNode, data, modifier);
     }
-  })
+  });
 }

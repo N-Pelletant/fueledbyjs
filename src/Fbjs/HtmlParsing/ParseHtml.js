@@ -1,3 +1,5 @@
+import initiateChildren from './Initiate/Children';
+
 import interpolateData from './Interpolate/Data';
 import interpolateChild from './Interpolate/Child';
 import interpolateEvent from './Interpolate/Event';
@@ -12,25 +14,26 @@ import Fbjs from './../Class'
  * @param {String} defaultHtml Default html written in placeholder child tags.
  * @returns {HTMLElement} Html template with interpolated data, with or without tags with conditions, events, and children.
  */
-const ParseHtml = function (elem, defaultHtml) {
-    const {
-        name, 
-        template, 
-        children = {}, 
-        data = {},
-    } = elem;
+const ParseHtml = FbjsElement => {
+    FbjsElement.htmlTemplate = new DOMParser().parseFromString(FbjsElement.stringTemplate, "text/html").querySelector(FbjsElement.name);
 
-    const parsedTemplate = new DOMParser().parseFromString(template, "text/html").querySelector(name);
+    if(_.isEmpty(FbjsElement.implementedChildren)) {
+        initiateChildren(FbjsElement);
+    }
 
-    const dataTemplate = interpolateData(parsedTemplate, {...data, defaultHtml});
+    interpolateData(FbjsElement);
 
-    const conditionTemplate = applyIfConditions(dataTemplate, data);
+    applyIfConditions(FbjsElement);
 
-    const eventTemplate = interpolateEvent(conditionTemplate, elem);
+    interpolateEvent(FbjsElement);
 
-    const childTemplate = interpolateChild(eventTemplate, children);
+    interpolateChild(FbjsElement);
 
-    return childTemplate;
+    if(FbjsElement.id) {
+        FbjsElement.htmlTemplate.setAttribute("id", FbjsElement.id);
+    }
+
+    return FbjsElement.htmlTemplate;
 }
 
 export default ParseHtml;

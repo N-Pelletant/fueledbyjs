@@ -4,4 +4,4 @@ const holder = document.getElementById('app');
 
 Root.parent = holder;
 
-holder.appendChild(Root.render)
+holder.appendChild(Root.render())

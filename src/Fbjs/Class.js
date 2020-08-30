@@ -12,8 +12,8 @@ export default class Fbjs {
         this.data                   = args.data;
         this.methods                = args.methods;
         this.props                  = args.props;
-        this.parent                 = args.parent;
-        /** @type {HTMLElement} */
+        this.hooks                  = args.hooks;
+        this.parent                 = null;
         this.htmlTemplate           = null;
         this.implementedChildren    = {};
         this.id                     = null;
@@ -25,9 +25,13 @@ export default class Fbjs {
      * @param {Function} fn Function to trigger on event.
      * @param {HTMLElement} source Html element which triggers the events.
      */
-    static updateDataFromEvent(elem, fn, source) {
-        fn(elem.data, source);
-        Fbjs.updateDisplay(elem);
+    static updateDataFromEvent(
+        elem,   // Instance de fbjs
+        fn,     // Méthode 
+        source  // Element html qui déclenche l'evenement
+    ) {
+        fn(elem.data, source);      // On applique la méthode avec les deux arguments
+        Fbjs.updateDisplay(elem);   // On met a jour l'affichage
     }
 
     /**
@@ -56,7 +60,7 @@ export default class Fbjs {
         return this.htmlTemplate;
     }
 
-    cloneProperties() {
+    clone() {
         return _.cloneDeep(this);
     }
 }

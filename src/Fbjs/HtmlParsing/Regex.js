@@ -5,10 +5,10 @@
  */
 
 function findAllDataPlaceholders(str) {
-    if(!str) return null;
+    if(!str) return null;                   // On renvoie null si il n'y a pas de paramètre
 
-    const regex = /\${([a-zA-Z0-9]\w+)}/g;
-    return str.match(regex);
+    const regex = /\${([a-zA-Z0-9]\w+)}/g;  // On créé l'expression régulière
+    return str.match(regex);                // On renvoie les correspondances dans la chaine
 }
 
 export default findAllDataPlaceholders;

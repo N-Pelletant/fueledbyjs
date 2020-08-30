@@ -1,4 +1,5 @@
 import initiateChildren from './Initiate/Children';
+import getHooks from './Initiate/Hook';
 
 import interpolateData from './Interpolate/Data';
 import interpolateChild from './Interpolate/Child';
@@ -17,8 +18,12 @@ import Fbjs from './../Class'
 const ParseHtml = FbjsElement => {
     FbjsElement.htmlTemplate = new DOMParser().parseFromString(FbjsElement.stringTemplate, "text/html").querySelector(FbjsElement.name);
 
-    if(_.isEmpty(FbjsElement.implementedChildren)) {
+    if(FbjsElement.children && _.isEmpty(FbjsElement.implementedChildren)) {
         initiateChildren(FbjsElement);
+    }
+
+    if(!FbjsElement.data.hooks) {
+        getHooks(FbjsElement);
     }
 
     interpolateData(FbjsElement);

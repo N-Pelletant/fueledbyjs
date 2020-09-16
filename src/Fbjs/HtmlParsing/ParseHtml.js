@@ -22,17 +22,22 @@ const ParseHtml = FbjsElement => {
         initiateChildren(FbjsElement);
     }
 
-    if(!FbjsElement.data.hooks) {
+    if(FbjsElement.data && !FbjsElement.data.hooks) {
         getHooks(FbjsElement);
     }
 
-    interpolateData(FbjsElement);
+    if(FbjsElement.data) {
+        interpolateData(FbjsElement);
+        applyIfConditions(FbjsElement);
+    }
 
-    applyIfConditions(FbjsElement);
+    if(FbjsElement.methods) {
+        interpolateEvent(FbjsElement);
+    }
 
-    interpolateEvent(FbjsElement);
-
-    interpolateChild(FbjsElement);
+    if(FbjsElement.implementedChildren) {
+        interpolateChild(FbjsElement);
+    }
 
     if(FbjsElement.id) {
         FbjsElement.htmlTemplate.setAttribute("id", FbjsElement.id);

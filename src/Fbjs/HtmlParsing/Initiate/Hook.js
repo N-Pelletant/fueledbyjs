@@ -9,6 +9,7 @@ import _ from 'lodash';
 export default function getHooks(FbjsElement) {
   if (_.isEmpty(FbjsElement.implementedChildren)) return;
 
+  if (!FbjsElement.data) FbjsElement.data = {};
   if (!FbjsElement.data.hooks) FbjsElement.data.hooks = {};
 
   Object.keys(FbjsElement.implementedChildren).forEach(childId => {

@@ -17,12 +17,13 @@ export default function initiateChildren(FbjsElement) {
 
     childrenNodes.forEach(childrenNode => {
       /* Find the model corresponding to the child */
-      const childModel = children[_.capitalize(childrenNode.localName)];
+      const childModel = children[_.capitalize(childrenNode.localName.toLowerCase())];
       /* Id to search html nodes quicker later on */
       const id         = childModel.name + Math.floor(Date.now() * Math.random());
 
       /* Creating a new instance of the model and adding its properties */
       const child = new Fbjs(childModel.clone());
+      if(!child.data) child.data = {};
       child.id = id;
       child.parent = FbjsElement;
       child.data.defaultHtml = childrenNode.innerHTML;
